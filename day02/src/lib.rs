@@ -113,7 +113,7 @@ pub fn sum_strategy(input: &[&str]) -> i32 {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: [&'static str; 3] = ["A Y", "B X", "C Z"];
+    const TEST_INPUT: [&str; 3] = ["A Y", "B X", "C Z"];
 
     #[test]
     fn it_parses_hands() {

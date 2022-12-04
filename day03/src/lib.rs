@@ -14,10 +14,10 @@ fn get_overlap(pack: &str) -> HashSet<char> {
     &left & &right
 }
 
-fn get_priority(c: &char) -> u32 {
+fn get_priority(c: char) -> u32 {
     match c {
-        'a'..='z' => *c as u32 - 'a' as u32 + 1,
-        'A'..='Z' => *c as u32 - 'A' as u32 + 27,
+        'a'..='z' => c as u32 - 'a' as u32 + 1,
+        'A'..='Z' => c as u32 - 'A' as u32 + 27,
         _ => panic!("ruh roh raggy"),
     }
 }
@@ -25,7 +25,7 @@ fn get_priority(c: &char) -> u32 {
 pub fn sum_priorities(input: &[&str]) -> u32 {
     input
         .iter()
-        .map(|pack| get_overlap(pack).iter().map(get_priority).sum::<u32>())
+        .map(|pack| get_overlap(pack).into_iter().map(get_priority).sum::<u32>())
         .sum()
 }
 
@@ -38,7 +38,7 @@ pub fn sum_group_priorities(input: &[&str]) -> u32 {
                 .map(|pack| pack.chars().collect::<HashSet<char>>())
                 .reduce(|acc, pack| &acc & &pack)
                 .unwrap()
-                .iter()
+                .into_iter()
                 .map(get_priority)
                 .sum::<u32>()
         })
@@ -49,7 +49,7 @@ pub fn sum_group_priorities(input: &[&str]) -> u32 {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: [&'static str; 6] = [
+    const TEST_INPUT: [&str; 6] = [
         "vJrwpWtwJgWrhcsFMMfFFhFp",
         "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
         "PmmdzqPrVvPwwTWBwg",
@@ -76,10 +76,10 @@ mod tests {
 
     #[test]
     fn it_gets_priority() {
-        assert_eq!(get_priority(&'a'), 1);
-        assert_eq!(get_priority(&'z'), 26);
-        assert_eq!(get_priority(&'A'), 27);
-        assert_eq!(get_priority(&'Z'), 52);
+        assert_eq!(get_priority('a'), 1);
+        assert_eq!(get_priority('z'), 26);
+        assert_eq!(get_priority('A'), 27);
+        assert_eq!(get_priority('Z'), 52);
     }
 
     #[test]

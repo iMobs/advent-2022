@@ -36,7 +36,7 @@ fn sum_calories(list: &[&str]) -> Vec<i32> {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: [&'static str; 14] = [
+    const TEST_INPUT: [&str; 14] = [
         "1000", "2000", "3000", "", "4000", "", "5000", "6000", "", "7000", "8000", "9000", "",
         "10000",
     ];
