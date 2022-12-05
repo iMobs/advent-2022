@@ -4,26 +4,21 @@ pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
 
-fn split_pairs(input: &[&str]) -> Vec<(RangeInclusive<i32>, RangeInclusive<i32>)> {
-    input
-        .iter()
-        .map(|line| {
-            let line: Vec<RangeInclusive<i32>> = line
-                .split(',')
-                .map(|range| {
-                    let values: Vec<i32> = range.split('-').map(|v| v.parse().unwrap()).collect();
-                    values[0]..=values[1]
-                })
-                .collect();
+fn split_pairs<'a>(
+    input: &'a [&str],
+) -> impl Iterator<Item = (RangeInclusive<i32>, RangeInclusive<i32>)> + 'a {
+    input.iter().map(|line| {
+        let mut line = line.split(',').map(|range| {
+            let mut values = range.split('-').map(|v| v.parse().unwrap());
+            values.next().unwrap()..=values.next().unwrap()
+        });
 
-            (line[0].clone(), line[1].clone())
-        })
-        .collect()
+        (line.next().unwrap(), line.next().unwrap())
+    })
 }
 
 pub fn work_overlaps(input: &[&str]) -> usize {
     split_pairs(input)
-        .into_iter()
         .filter(|(a, b)| {
             a.start() <= b.start() && b.end() <= a.end()
                 || b.start() <= a.start() && a.end() <= b.end()
@@ -33,7 +28,6 @@ pub fn work_overlaps(input: &[&str]) -> usize {
 
 pub fn any_overlaps(input: &[&str]) -> usize {
     split_pairs(input)
-        .into_iter()
         .filter(|(a, b)| {
             if a.start() <= b.start() {
                 b.start() <= a.end()
@@ -54,7 +48,7 @@ mod tests {
 
     #[test]
     fn it_splits_pairs() {
-        let result = split_pairs(&TEST_INPUT);
+        let result: Vec<_> = split_pairs(&TEST_INPUT).collect();
         assert_eq!(
             result,
             [
