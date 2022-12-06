@@ -5,7 +5,7 @@ pub fn challenge_1(input: &str) -> usize {
 }
 
 pub fn challenge_2(input: &str) -> usize {
-    find_unique_limit(input, 14)
+    alt_find_unique_limit(input, 14)
 }
 
 fn find_unique_limit(input: &str, limit: usize) -> usize {
@@ -25,6 +25,18 @@ fn find_unique_limit(input: &str, limit: usize) -> usize {
     }
 
     unreachable!()
+}
+
+fn alt_find_unique_limit(input: &str, limit: usize) -> usize {
+    input
+        .as_bytes()
+        .windows(limit)
+        .position(|w| {
+            let set: HashSet<_> = w.iter().collect();
+            set.len() == limit
+        })
+        .unwrap()
+        + limit
 }
 
 #[cfg(test)]
