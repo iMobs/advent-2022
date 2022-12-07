@@ -1,81 +1,52 @@
-use std::str::Lines;
-
 pub fn challenge_1(input: &str) -> usize {
-    let root = read_dirs(&mut input.lines());
+    let (_, dir_sizes) = parse_dir_sizes(input);
 
     const MAX_SIZE: usize = 100_000;
 
-    get_dir_sizes(&root).filter(|&size| size < MAX_SIZE).sum()
+    dir_sizes.into_iter().filter(|&size| size < MAX_SIZE).sum()
 }
 
 pub fn challenge_2(input: &str) -> usize {
-    let root = read_dirs(&mut input.lines());
+    let (root_size, dir_sizes) = parse_dir_sizes(input);
 
     const DISK_SIZE: usize = 70_000_000;
     const UNUSED_SIZE: usize = 30_000_000;
-    let required = UNUSED_SIZE - (DISK_SIZE - root.size);
+    let required = UNUSED_SIZE - (DISK_SIZE - root_size);
 
-    get_dir_sizes(&root)
+    dir_sizes
+        .into_iter()
         .filter(|&size| size >= required)
         .min()
         .expect("no directories are the required size")
 }
 
-fn read_dirs(lines: &mut Lines<'_>) -> Dir {
-    let mut dir = Dir {
-        size: 0,
-        entries: Vec::new(),
-    };
+fn parse_dir_sizes(input: &str) -> (usize, Vec<usize>) {
+    let mut dir_stack = Vec::new();
+    let mut dir_sizes = Vec::new();
 
-    while let Some(line) = lines.next() {
-        // Ignore cd root and ls command
-        if line == "$ cd /" || line == "$ ls" {
-            continue;
-        }
-
-        // Ignore dir names
-        if line.starts_with("dir") {
-            continue;
-        }
-
-        // Stop reading lines if backtracking
-        if line == "$ cd .." {
-            break;
-        }
-
-        // Recurse into a directory
-        if line.starts_with("$ cd") {
-            let child = read_dirs(lines);
-            dir.size += child.size;
-            dir.entries.push(child);
-        } else {
-            // Parse a file size and add to current directory size
-            dir.size += line
-                .split_once(' ')
-                .expect("malformed file entry")
-                .0
-                .parse::<usize>()
-                .expect("malformed file size");
+    for line in input.lines() {
+        if let Some(line) = line.strip_prefix("$ cd ") {
+            if line == ".." {
+                let size = dir_stack.pop().expect("empty stack");
+                dir_sizes.push(size);
+                *dir_stack.last_mut().expect("no parent") += size;
+            } else {
+                dir_stack.push(0);
+            }
+        } else if let Some((size, _filename)) = line.split_once(' ') {
+            if let Ok(size) = size.parse::<usize>() {
+                *dir_stack.last_mut().expect("empty stack") += size;
+            }
         }
     }
 
-    dir
-}
+    let mut root_size = 0;
+    for size in dir_stack.into_iter().rev() {
+        root_size += size;
+        dir_sizes.push(root_size);
+    }
 
-// Map all entires into their sizes
-fn get_dir_sizes(root: &Dir) -> impl Iterator<Item = usize> + '_ {
-    recurse_dirs(root).map(|dir| dir.size)
-}
-
-// Recursively chain all entries into an iterator
-fn recurse_dirs(root: &Dir) -> Box<dyn Iterator<Item = &Dir> + '_> {
-    Box::new(std::iter::once(root).chain(root.entries.iter().flat_map(recurse_dirs)))
-}
-
-#[derive(Debug)]
-struct Dir {
-    size: usize,
-    entries: Vec<Dir>,
+    (root_size, dir_sizes)
 }
 
 #[cfg(test)]
