@@ -1,31 +1,23 @@
 use std::collections::HashSet;
 
 pub fn challenge_1(input: &str) -> usize {
-    let mut head = Position::new();
-    let mut tail = Position::new();
-
-    let mut unique_tails = HashSet::new();
-    unique_tails.insert(tail);
-
-    for movement in input.lines().flat_map(Position::from_string) {
-        head += movement;
-
-        tail.chase(head);
-
-        unique_tails.insert(tail);
-    }
-
-    unique_tails.len()
+    rope_chase(input, 2)
 }
 
 pub fn challenge_2(input: &str) -> usize {
-    let mut rope = [Position::new(); 10];
+    rope_chase(input, 10)
+}
+
+fn rope_chase(input: &str, rope_length: usize) -> usize {
+    let mut rope = vec![Position::new(); rope_length];
 
     let mut unique_tails = HashSet::new();
     unique_tails.insert(*rope.last().unwrap());
 
-    for movement in input.lines().flat_map(Position::from_string) {
-        *rope.first_mut().unwrap() += movement;
+    for movement in input.lines().flat_map(Position::iter_from_string) {
+        let head = rope.first_mut().unwrap();
+        head.x += movement.x;
+        head.y += movement.y;
 
         for i in 0..rope.len() - 1 {
             let head = rope[i];
@@ -50,15 +42,15 @@ impl Position {
         Self::default()
     }
 
-    fn from_string(input: &str) -> impl Iterator<Item = Position> + '_ {
-        let (direction, amount) = input.split_once(' ').expect("unknown position format");
-        let amount = amount.parse().unwrap();
+    fn iter_from_string(input: &str) -> impl Iterator<Item = Position> + '_ {
+        let (direction, amount) = input.split_once(' ').expect("unknown movement format");
+        let amount = amount.parse().expect("unknown movement amount");
         (0..amount).map(move |_| match direction {
             "R" => Self { x: 1, y: 0 },
             "L" => Self { x: -1, y: 0 },
             "U" => Self { x: 0, y: 1 },
             "D" => Self { x: 0, y: -1 },
-            _ => panic!("unknown direction"),
+            _ => panic!("unknown movement direction"),
         })
     }
 
@@ -69,33 +61,13 @@ impl Position {
         let abs_v_diff = v_diff.abs();
 
         if abs_h_diff > 1 || abs_v_diff > 1 {
-            if self.x != other.x && self.y != other.y {
+            if abs_h_diff != 0 {
                 self.x += h_diff / abs_h_diff;
-                self.y += v_diff / abs_v_diff;
-            } else if abs_h_diff > 1 {
-                self.x += h_diff / abs_h_diff;
-            } else {
+            }
+            if abs_v_diff != 0 {
                 self.y += v_diff / abs_v_diff;
             }
         }
-    }
-}
-
-impl std::ops::Add for Position {
-    type Output = Self;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Self {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-        }
-    }
-}
-
-impl std::ops::AddAssign for Position {
-    fn add_assign(&mut self, rhs: Self) {
-        self.x += rhs.x;
-        self.y += rhs.y;
     }
 }
 
