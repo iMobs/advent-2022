@@ -89,7 +89,7 @@ fn parse_trees(input: &str) -> Vec<Vec<u32>> {
         .collect()
 }
 
-fn get_score(trees: &Vec<Vec<u32>>, x: usize, y: usize) -> usize {
+fn get_score(trees: &[Vec<u32>], x: usize, y: usize) -> usize {
     let current_height = trees[x][y];
     let mut left = 0;
     let mut right = 0;
@@ -97,33 +97,35 @@ fn get_score(trees: &Vec<Vec<u32>>, x: usize, y: usize) -> usize {
     let mut down = 0;
 
     // look left from point
-    for x in (0..x).rev() {
+    for row in trees.iter().take(x).rev() {
         left += 1;
-        if trees[x][y] >= current_height {
+        if row[y] >= current_height {
             break;
         }
     }
 
     // look right from point
-    for x in x + 1..trees.len() {
+    for row in trees.iter().skip(x + 1) {
         right += 1;
-        if trees[x][y] >= current_height {
+        if row[y] >= current_height {
             break;
         }
     }
 
     // look up from point
-    for y in (0..y).rev() {
+    let row = &trees[x];
+    for &tree in row.iter().take(y).rev() {
         up += 1;
-        if trees[x][y] >= current_height {
+        if tree >= current_height {
             break;
         }
     }
 
     // look down from point
-    for y in y + 1..trees[x].len() {
+
+    for &tree in row.iter().skip(y + 1) {
         down += 1;
-        if trees[x][y] >= current_height {
+        if tree >= current_height {
             break;
         }
     }
