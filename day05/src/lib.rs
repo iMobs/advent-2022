@@ -45,7 +45,7 @@ fn parse_moves(moves: &str) -> impl Iterator<Item = (usize, usize, usize)> + '_ 
     })
 }
 
-pub fn invert_crates(input: &str) -> String {
+pub fn challenge_1(input: &str) -> String {
     let parts: Vec<&str> = input.split("\n\n").collect();
     let stacks = parts[0];
     let moves = parts[1];
@@ -69,7 +69,7 @@ pub fn invert_crates(input: &str) -> String {
     result
 }
 
-pub fn stack_chunks(input: &str) -> String {
+pub fn challenge_2(input: &str) -> String {
     let parts: Vec<&str> = input.split("\n\n").collect();
     let stacks = parts[0];
     let moves = parts[1];
@@ -114,7 +114,7 @@ move 1 from 1 to 2";
 
     #[test]
     fn it_works() {
-        let result = invert_crates(TEST_INPUT);
+        let result = challenge_1(TEST_INPUT);
         assert_eq!(result, "CMZ")
     }
 }

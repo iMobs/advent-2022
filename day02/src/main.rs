@@ -1,11 +1,11 @@
-use day02::{sum_score, sum_strategy};
+use day02::{challenge_1, challenge_2};
 
 fn main() {
     let input = include_str!("../input.txt");
     let input: Vec<&str> = input.trim().lines().collect();
-    let result = sum_score(&input);
+    let result = challenge_1(&input);
     println!("part1: {result}");
 
-    let result = sum_strategy(&input);
+    let result = challenge_2(&input);
     println!("part2: {result}");
 }

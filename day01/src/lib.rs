@@ -1,8 +1,8 @@
-pub fn most_calories(list: &[&str]) -> i32 {
+pub fn challenge_1(list: &[&str]) -> i32 {
     *sum_calories(list).iter().max().unwrap()
 }
 
-pub fn top_3_calories(list: &[&str]) -> i32 {
+pub fn challenge_2(list: &[&str]) -> i32 {
     let mut list = sum_calories(list);
     list.sort();
 
@@ -43,13 +43,13 @@ mod tests {
 
     #[test]
     fn it_finds_the_most_calories() {
-        let result = most_calories(&TEST_INPUT);
+        let result = challenge_1(&TEST_INPUT);
         assert_eq!(result, 24_000);
     }
 
     #[test]
     fn it_sums_the_top_3_calories() {
-        let result = top_3_calories(&TEST_INPUT);
+        let result = challenge_2(&TEST_INPUT);
         assert_eq!(result, 45_000);
     }
 

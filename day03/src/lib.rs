@@ -22,14 +22,14 @@ fn get_priority(c: char) -> u32 {
     }
 }
 
-pub fn sum_priorities(input: &[&str]) -> u32 {
+pub fn challenge_1(input: &[&str]) -> u32 {
     input
         .iter()
         .map(|pack| get_overlap(pack).into_iter().map(get_priority).sum::<u32>())
         .sum()
 }
 
-pub fn sum_group_priorities(input: &[&str]) -> u32 {
+pub fn challenge_2(input: &[&str]) -> u32 {
     input
         .chunks(3)
         .map(|packs| {
@@ -84,11 +84,11 @@ mod tests {
 
     #[test]
     fn it_sums_priorities() {
-        assert_eq!(sum_priorities(&TEST_INPUT), 157);
+        assert_eq!(challenge_1(&TEST_INPUT), 157);
     }
 
     #[test]
     fn it_sums_group_priorities() {
-        assert_eq!(sum_group_priorities(&TEST_INPUT), 70);
+        assert_eq!(challenge_2(&TEST_INPUT), 70);
     }
 }

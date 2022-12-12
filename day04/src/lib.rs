@@ -17,7 +17,7 @@ fn split_pairs<'a>(
     })
 }
 
-pub fn work_overlaps(input: &[&str]) -> usize {
+pub fn challenge_1(input: &[&str]) -> usize {
     split_pairs(input)
         .filter(|(a, b)| {
             a.start() <= b.start() && b.end() <= a.end()
@@ -26,7 +26,7 @@ pub fn work_overlaps(input: &[&str]) -> usize {
         .count()
 }
 
-pub fn any_overlaps(input: &[&str]) -> usize {
+pub fn challenge_2(input: &[&str]) -> usize {
     split_pairs(input)
         .filter(|(a, b)| {
             if a.start() <= b.start() {
@@ -64,13 +64,13 @@ mod tests {
 
     #[test]
     fn it_checks_overlaps() {
-        let result = work_overlaps(&TEST_INPUT);
+        let result = challenge_1(&TEST_INPUT);
         assert_eq!(result, 2);
     }
 
     #[test]
     fn it_checks_all_overlaps() {
-        let result = any_overlaps(&TEST_INPUT);
+        let result = challenge_2(&TEST_INPUT);
         assert_eq!(result, 4);
     }
 }

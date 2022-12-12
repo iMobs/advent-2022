@@ -60,7 +60,7 @@ impl From<char> for Result {
     }
 }
 
-pub fn sum_score(input: &[&str]) -> i32 {
+pub fn challenge_1(input: &[&str]) -> i32 {
     get_hands(input).iter().map(|(a, b)| b.play(*a)).sum()
 }
 
@@ -75,7 +75,7 @@ fn get_hands(input: &[&str]) -> Vec<(Hand, Hand)> {
         .collect()
 }
 
-pub fn sum_strategy(input: &[&str]) -> i32 {
+pub fn challenge_2(input: &[&str]) -> i32 {
     input
         .iter()
         .map(|line| {
@@ -139,13 +139,13 @@ mod tests {
 
     #[test]
     fn it_sums_score() {
-        let result = sum_score(&TEST_INPUT);
+        let result = challenge_1(&TEST_INPUT);
         assert_eq!(result, 15);
     }
 
     #[test]
     fn it_sums_strategy() {
-        let result = sum_strategy(&TEST_INPUT);
+        let result = challenge_2(&TEST_INPUT);
         assert_eq!(result, 12);
     }
 }

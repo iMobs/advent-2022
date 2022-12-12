@@ -1,10 +1,10 @@
-use day05::{invert_crates, stack_chunks};
+use day05::{challenge_1, challenge_2};
 
 fn main() {
-    let input = include_str!("../input.txt").trim_end();
-    let result = invert_crates(input);
+    let input = include_str!("../input.txt");
+    let result = challenge_1(input);
     println!("part1: {result}");
 
-    let result = stack_chunks(input);
+    let result = challenge_2(input);
     println!("part2: {result}");
 }

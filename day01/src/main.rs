@@ -1,11 +1,11 @@
-use day01::{most_calories, top_3_calories};
+use day01::{challenge_1, challenge_2};
 
 fn main() {
     let input = include_str!("../input.txt");
     let input: Vec<&str> = input.trim().lines().collect();
-    let result = most_calories(&input);
+    let result = challenge_1(&input);
     println!("part1: {result}");
 
-    let result = top_3_calories(&input);
+    let result = challenge_2(&input);
     println!("part2: {result}");
 }

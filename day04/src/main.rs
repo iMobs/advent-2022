@@ -1,11 +1,11 @@
-use day04::{any_overlaps, work_overlaps};
+use day04::{challenge_1, challenge_2};
 
 fn main() {
     let input = include_str!("../input.txt");
     let input: Vec<&str> = input.trim().lines().collect();
-    let result = work_overlaps(&input);
+    let result = challenge_1(&input);
     println!("part1: {result}");
 
-    let result = any_overlaps(&input);
+    let result = challenge_2(&input);
     println!("part2: {result}");
 }
