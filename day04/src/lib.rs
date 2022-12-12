@@ -5,9 +5,9 @@ pub fn add(left: usize, right: usize) -> usize {
 }
 
 fn split_pairs<'a>(
-    input: &'a [&str],
+    input: &'a str,
 ) -> impl Iterator<Item = (RangeInclusive<i32>, RangeInclusive<i32>)> + 'a {
-    input.iter().map(|line| {
+    input.lines().map(|line| {
         let mut line = line.split(',').map(|range| {
             let mut values = range.split('-').map(|v| v.parse().unwrap());
             values.next().unwrap()..=values.next().unwrap()
@@ -17,7 +17,7 @@ fn split_pairs<'a>(
     })
 }
 
-pub fn challenge_1(input: &[&str]) -> usize {
+pub fn challenge_1(input: &str) -> usize {
     split_pairs(input)
         .filter(|(a, b)| {
             a.start() <= b.start() && b.end() <= a.end()
@@ -26,7 +26,7 @@ pub fn challenge_1(input: &[&str]) -> usize {
         .count()
 }
 
-pub fn challenge_2(input: &[&str]) -> usize {
+pub fn challenge_2(input: &str) -> usize {
     split_pairs(input)
         .filter(|(a, b)| {
             if a.start() <= b.start() {
@@ -42,13 +42,16 @@ pub fn challenge_2(input: &[&str]) -> usize {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: [&str; 6] = [
-        "2-4,6-8", "2-3,4-5", "5-7,7-9", "2-8,3-7", "6-6,4-6", "2-6,4-8",
-    ];
+    const TEST_INPUT: &str = "2-4,6-8
+2-3,4-5
+5-7,7-9
+2-8,3-7
+6-6,4-6
+2-6,4-8";
 
     #[test]
     fn it_splits_pairs() {
-        let result: Vec<_> = split_pairs(&TEST_INPUT).collect();
+        let result: Vec<_> = split_pairs(TEST_INPUT).collect();
         assert_eq!(
             result,
             [
@@ -64,13 +67,13 @@ mod tests {
 
     #[test]
     fn it_checks_overlaps() {
-        let result = challenge_1(&TEST_INPUT);
+        let result = challenge_1(TEST_INPUT);
         assert_eq!(result, 2);
     }
 
     #[test]
     fn it_checks_all_overlaps() {
-        let result = challenge_2(&TEST_INPUT);
+        let result = challenge_2(TEST_INPUT);
         assert_eq!(result, 4);
     }
 }

@@ -22,15 +22,17 @@ fn get_priority(c: char) -> u32 {
     }
 }
 
-pub fn challenge_1(input: &[&str]) -> u32 {
+pub fn challenge_1(input: &str) -> u32 {
     input
-        .iter()
+        .lines()
         .map(|pack| get_overlap(pack).into_iter().map(get_priority).sum::<u32>())
         .sum()
 }
 
-pub fn challenge_2(input: &[&str]) -> u32 {
+pub fn challenge_2(input: &str) -> u32 {
     input
+        .lines()
+        .collect::<Vec<&str>>()
         .chunks(3)
         .map(|packs| {
             packs
@@ -49,30 +51,12 @@ pub fn challenge_2(input: &[&str]) -> u32 {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: [&str; 6] = [
-        "vJrwpWtwJgWrhcsFMMfFFhFp",
-        "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
-        "PmmdzqPrVvPwwTWBwg",
-        "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
-        "ttgJtRGJQctTZtZT",
-        "CrZsJsPPZsGzwwsLwLmpwMDw",
-    ];
-
-    #[test]
-    fn it_splits_pack() {
-        let result = split_pack(TEST_INPUT[0]);
-        assert_eq!(result, ("vJrwpWtwJgWr", "hcsFMMfFFhFp"));
-    }
-
-    #[test]
-    fn it_gets_overlap() {
-        assert_eq!(get_overlap(TEST_INPUT[0]), HashSet::from(['p']));
-        assert_eq!(get_overlap(TEST_INPUT[1]), HashSet::from(['L']));
-        assert_eq!(get_overlap(TEST_INPUT[2]), HashSet::from(['P']));
-        assert_eq!(get_overlap(TEST_INPUT[3]), HashSet::from(['v']));
-        assert_eq!(get_overlap(TEST_INPUT[4]), HashSet::from(['t']));
-        assert_eq!(get_overlap(TEST_INPUT[5]), HashSet::from(['s']));
-    }
+    const TEST_INPUT: &str = "vJrwpWtwJgWrhcsFMMfFFhFp
+jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw";
 
     #[test]
     fn it_gets_priority() {
@@ -84,11 +68,11 @@ mod tests {
 
     #[test]
     fn it_sums_priorities() {
-        assert_eq!(challenge_1(&TEST_INPUT), 157);
+        assert_eq!(challenge_1(TEST_INPUT), 157);
     }
 
     #[test]
     fn it_sums_group_priorities() {
-        assert_eq!(challenge_2(&TEST_INPUT), 70);
+        assert_eq!(challenge_2(TEST_INPUT), 70);
     }
 }

@@ -60,13 +60,13 @@ impl From<char> for Result {
     }
 }
 
-pub fn challenge_1(input: &[&str]) -> i32 {
+pub fn challenge_1(input: &str) -> i32 {
     get_hands(input).iter().map(|(a, b)| b.play(*a)).sum()
 }
 
-fn get_hands(input: &[&str]) -> Vec<(Hand, Hand)> {
+fn get_hands(input: &str) -> Vec<(Hand, Hand)> {
     input
-        .iter()
+        .lines()
         .map(|line| {
             let line: Vec<char> = line.chars().collect();
 
@@ -75,9 +75,9 @@ fn get_hands(input: &[&str]) -> Vec<(Hand, Hand)> {
         .collect()
 }
 
-pub fn challenge_2(input: &[&str]) -> i32 {
+pub fn challenge_2(input: &str) -> i32 {
     input
-        .iter()
+        .lines()
         .map(|line| {
             let line: Vec<char> = line.chars().collect();
 
@@ -113,7 +113,9 @@ pub fn challenge_2(input: &[&str]) -> i32 {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: [&str; 3] = ["A Y", "B X", "C Z"];
+    const TEST_INPUT: &str = "A Y
+B X
+C Z";
 
     #[test]
     fn it_parses_hands() {
@@ -128,7 +130,7 @@ mod tests {
     #[test]
     fn it_gets_hands() {
         assert_eq!(
-            get_hands(&TEST_INPUT),
+            get_hands(TEST_INPUT),
             [
                 (Hand::Rock, Hand::Paper),
                 (Hand::Paper, Hand::Rock),
@@ -139,13 +141,13 @@ mod tests {
 
     #[test]
     fn it_sums_score() {
-        let result = challenge_1(&TEST_INPUT);
+        let result = challenge_1(TEST_INPUT);
         assert_eq!(result, 15);
     }
 
     #[test]
     fn it_sums_strategy() {
-        let result = challenge_2(&TEST_INPUT);
+        let result = challenge_2(TEST_INPUT);
         assert_eq!(result, 12);
     }
 }
