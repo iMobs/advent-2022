@@ -51,7 +51,7 @@ fn nested_parser(input: &str) -> IResult<&str, Nested> {
             separated_list0(
                 tag(","),
                 alt((
-                    map(map_res(digit1, |s| s.parse()), Nested::Value),
+                    map(map_res(digit1, |s: &str| s.parse()), Nested::Value),
                     nested_parser,
                 )),
             ),
