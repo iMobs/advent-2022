@@ -13,8 +13,7 @@ pub fn challenge_1(input: &str) -> usize {
     assert!(r.is_empty());
     list.into_iter()
         .enumerate()
-        .filter(|(_, (left, right))| left < right)
-        .map(|(i, _)| i + 1)
+        .filter_map(|(i, (left, right))| if left < right { Some(i + 1) } else { None })
         .sum()
 }
 
