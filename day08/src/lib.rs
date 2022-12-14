@@ -61,7 +61,7 @@ pub fn challenge_1(input: &str) -> usize {
 
     visible_trees
         .into_iter()
-        .flat_map(|row| row.into_iter().map(|visible| if visible { 1 } else { 0 }))
+        .flat_map(|row| row.into_iter().map(usize::from))
         .sum()
 }
 

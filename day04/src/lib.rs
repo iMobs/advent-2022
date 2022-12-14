@@ -4,9 +4,9 @@ pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
 
-fn split_pairs<'a>(
-    input: &'a str,
-) -> impl Iterator<Item = (RangeInclusive<i32>, RangeInclusive<i32>)> + 'a {
+fn split_pairs(
+    input: &str,
+) -> impl Iterator<Item = (RangeInclusive<i32>, RangeInclusive<i32>)> + '_ {
     input.lines().map(|line| {
         let mut line = line.split(',').map(|range| {
             let mut values = range.split('-').map(|v| v.parse().unwrap());
