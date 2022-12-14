@@ -19,23 +19,25 @@ pub fn challenge_1(input: &str) -> usize {
 }
 
 pub fn challenge_2(input: &str) -> usize {
-    let div1 = Nested::List(vec![Nested::List(vec![Nested::Value(2)])]);
-    let div2 = Nested::List(vec![Nested::List(vec![Nested::Value(6)])]);
+    const DIV1: Nested = Nested::Value(2);
+    const DIV2: Nested = Nested::Value(6);
 
-    let (r, mut nested) = list_parser(input).unwrap();
+    let (r, nested) = list_parser(input).unwrap();
     assert!(r.is_empty());
 
-    nested.push(div1.clone());
-    nested.push(div2.clone());
+    let mut div1_index = 1;
+    let mut div2_index = 2;
+    for nested in nested {
+        if nested < DIV1 {
+            div1_index += 1;
+        }
 
-    nested.sort();
+        if nested < DIV2 {
+            div2_index += 1;
+        }
+    }
 
-    nested
-        .into_iter()
-        .enumerate()
-        .filter(|(_, nested)| *nested == div1 || *nested == div2)
-        .map(|(i, _)| i + 1)
-        .product()
+    div1_index * div2_index
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
