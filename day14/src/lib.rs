@@ -2,8 +2,8 @@ use std::collections::HashSet;
 
 use nom::{
     bytes::complete::tag,
-    character::complete::{char, digit1, newline},
-    combinator::{all_consuming, map_res},
+    character::complete::{char, newline, u32},
+    combinator::all_consuming,
     multi::separated_list1,
     sequence::separated_pair,
     IResult,
@@ -81,10 +81,7 @@ pub fn challenge_2(input: &str) -> usize {
 fn parse_input(input: &str) -> IResult<&str, (u32, HashSet<(u32, u32)>)> {
     let (r, input) = all_consuming(separated_list1(
         newline,
-        separated_list1(
-            tag(" -> "),
-            separated_pair(parse_number, char(','), parse_number),
-        ),
+        separated_list1(tag(" -> "), separated_pair(u32, char(','), u32)),
     ))(input)?;
 
     let mut sandbox = HashSet::new();
@@ -119,10 +116,6 @@ fn parse_input(input: &str) -> IResult<&str, (u32, HashSet<(u32, u32)>)> {
     }
 
     Ok((r, (floor, sandbox)))
-}
-
-fn parse_number(input: &str) -> IResult<&str, u32> {
-    map_res(digit1, |s: &str| s.parse())(input)
 }
 
 #[cfg(test)]
